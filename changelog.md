@@ -1,8 +1,8 @@
-# TavyzaOS 0.0.2
+# TavyzaOS 0.0.3
 
 ### Added
+did more of the abyss window manager
 
 ### Changed/Fixed
-Minified OS files
 
 ## Removed
