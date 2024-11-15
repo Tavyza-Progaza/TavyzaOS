@@ -1,1 +1,85 @@
-local a={}local function b(c)if c:sub(-1)~="\n"then c=c.."\n"end;return c:gmatch("(.-)\n")end;local function d(e)local f=kernel.primary_gpu.getForeground()kernel.primary_gpu.setForeground(0xFF0000)for c in b(e)do io.println(c)end;kernel.primary_gpu.setForeground(f)end;local function g(h)words={}for i in h:gmatch("%S+")do table.insert(words,i)end;h=words[1]table.remove(words,1)if h==""then d("Must specify file name")return end;if not h:match("%.lua$")then h="/cmd/"..h..".lua"end;if fs.exists(h)then os.log("Attempting to run file at "..h)xpcall(require(h),function(e)d(e)d(debug.traceback())end,table.unpack(words))else d("File '"..h.."' does not exist")end end;local function j()local f=kernel.primary_gpu.getForeground()kernel.primary_gpu.setForeground(0x00FF00)io.print("$ ")kernel.primary_gpu.setForeground(f)end;local function k()io.clear()local l=""j()while true do local m=keyboard.getNextKey()if m=="BACK"then if l~=""then l=l:sub(1,-2)io.erase(1)end elseif m=="ENTER"then io.println("")g(l)l=""j()else io.print(m)l=l..m end end end;function a.getShell()return thread.create(k,8)end;return a
+-- Gonna make a new shell
+shell = {}
+io.setGpu(kernel.primary_gpu)
+gpu = kernel.primary_gpu
+io.println("TavyzaOS shell 0.0.3 for " .. _G._OSVERSION)
+io.println("In alpha. Expect issues.")
+
+local function magiclines(s)
+	if s:sub(-1) ~= "\n" then
+		s = s .. "\n"
+	end
+	return s:gmatch("(.-)\n")
+end
+
+local function write_err(s)
+	local fg = gpu.getForeground()
+	gpu.setForeground(0xFF0000)
+	for s in magiclines(s) do
+		io.println(s)
+	end
+	gpu.setForeground(fg)
+end
+
+local function line()
+	io.print("\n")
+	local fg = gpu.getForeground()
+	gpu.setForeground(0x00FF00)
+	io.print(_G.WD .. " ~> ")
+	gpu.setForeground(fg)
+end
+
+local function run_cmd(file)
+	local words = {}
+	for word in file:gmatch("%S+") do
+		table.insert(words, word)
+	end
+	file = words[1]
+	table.remove(words, 1)
+	if file == "" then
+		write_err("Must specify file name")
+		return
+	end
+	if not fs.exists(_G.WD .. file) or not fs.exists(_G.WD .. file .. ".lua") then -- replace with a global working directory
+		file = "/cmd/" .. file
+	elseif fs.exists(_G.WD .. file .. ".lua") then
+		file = file .. ".lua"
+	end
+	if fs.exists(file) then
+		xpcall(require(file), function(message)
+			write_err(message)
+			write_err(debug.traceback())
+		end, table.unpack(words))
+	else
+		write_err(file .. " does not exist.")
+	end
+end
+
+local function start()
+	io.clear()
+	local buffer = ""
+	line()
+	while true do
+		local key = keyboard.getNextKey()
+		if key == "BACK" then
+			if buffer ~= "" then
+				buffer = buffer.sub(1, -2)
+				io.erase(1)
+			end
+		elseif key == "ENTER" then
+			io.println("")
+			run_cmd(buffer)
+			buffer = ""
+			line()
+		else
+			io.print(key)
+			buffer = buffer .. key
+		end
+	end
+end
+
+function shell.getShell()
+	return thread.create(start, 8)
+end
+
+return shell

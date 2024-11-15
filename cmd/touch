@@ -1,5 +1,5 @@
 local arg = ...
 
 io.println(arg)
-file = fs.open("/" .. arg, "w")
+file = fs.open(_G.WD .. arg, "w")
 file:close()

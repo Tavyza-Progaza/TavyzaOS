@@ -6,7 +6,7 @@ Loading /core/thread.lua
 Loading /core/io.lua
 Loading /core/keyboard.lua
 Loading /core/shell.lua
+Changing IO gpu
 Loading /core/require.lua
 Finishing library initialization
 Changing IO gpu
-Attempting to run file at /cmd/ls.lua

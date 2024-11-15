@@ -1,0 +1,10 @@
+local args = {...}
+
+usage = [[Usage: cd (directory)
+Changes to (directory)
+]]
+if fs.exists(args[1]) and fs.isDirectory(args[1]) then
+    _G.WD = fs.concat(_G.WD, args[1])
+else
+    io.println("Directory does not exist.")
+end

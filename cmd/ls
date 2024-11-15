@@ -1,6 +1,6 @@
 local arg = ...
 
-if arg == nil then arg = "/" end
+if arg == nil then arg = _G.WD end
 
 for node in fs.list(arg) do
     io.println(node)

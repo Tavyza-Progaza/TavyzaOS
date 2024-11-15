@@ -1,6 +1,6 @@
 # TavyzaOS
 
-This branch (TavyzaOS) is a new generation of TherOS, as a distribution of Cobalt.
+This branch (TavyzaOS) is a new generation of TherOS, as a distribution of Cobalt, a lightweight OS.
 During the development period, expect heaps of issues and missing features. Please report all bugs to the issue tracker.
 
 ## PLANNED FEATURES:

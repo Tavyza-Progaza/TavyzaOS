@@ -1,0 +1,39 @@
+Documentation for those who want to develop programs for TavyzaOS.
+
+## APIs
+
+### io (/core/io.lua)
+io.setGpu(gpu): bool
+Sets the current gpu
+Also sets the cursor position, and screen width + height
+              io.cur_w and io.cur_h      io.w, io.h
+
+io.clear()
+Clears the screen
+
+io.erase(n: number)
+Erase n characters back from the cursor position
+
+io.bump()
+move the screen up
+
+io.print(text)
+equivalent to io.write() in OpenOS. Prints text to the screen.
+
+io.println(text)
+Equivalent to print(). Prints text to the screen and starts a new line.
+
+### Filesystem (/core/fs.lua)
+
+fs.canonical("path"): string
+Returns the canonical form of the specified path.
+Example: /tmp/../cmd/ls.lua turns into /cmd/ls.lua
+
+fs.segments("path"): table
+Returns a table containing one entry for rach canonical segment of the given path.
+fs.segments("/cmd/ls.lua"): {"cmd", "ls.lua"}
+
+fs.concat("pathA", "pathB"[, ...]): string
+concatenates two or more paths, aka mashing them together.
+
+fs.path("path"): string
